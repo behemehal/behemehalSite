@@ -1,0 +1,23 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.tsx";
+import Footer from "../components/Footer.tsx";
+---
+
+<Layout
+  title="Behemehal - Page not found"
+  description="Açık kaynak dünyaya, Açık kaynak çözümler"
+  url="https://behemehal.org"
+>
+  <Navbar client:load />
+  <section class="w-full h-screen min-h-[550px] p-12 pt-[90px] bg-primaryDark text-center">
+    <div class="mt-[20px] bg-black rounded-lg h-auto min-h-[220px] pt-12 pl-6">
+      <p class="text-white text-6xl">404</p>
+      <p class="text-white text-4xl mt-3">Page not found</p>
+      <a href="/" class="inline-block mt-6 text-white text-xl hover:underline">
+        Go back home
+      </a>
+    </div>
+  </section>
+  <Footer />
+</Layout>

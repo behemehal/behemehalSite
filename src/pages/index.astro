@@ -1,0 +1,14 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.tsx";
+import HomeBody from "../components/HomeBody.tsx";
+---
+
+<Layout
+  title="Behemehal"
+  description="Open source solutions to Open source world"
+  url="https://behemehal.org"
+>
+  <Navbar client:load />
+  <HomeBody />
+</Layout>

@@ -1,0 +1,14 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Navbar from "../components/Navbar.tsx";
+import AhmetcanBody from "../components/AhmetcanBody.tsx";
+---
+
+<Layout
+  title="Ahmetcan Aksu — Software Developer"
+  description="Ahmetcan Aksu — software developer from Istanbul, creator of the Ellie language and open source Rust tools."
+  url="https://behemehal.org/ahmetcan"
+>
+  <Navbar client:load />
+  <AhmetcanBody />
+</Layout>
