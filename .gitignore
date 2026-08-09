@@ -1,1 +1,17 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# deno (legacy)
 deno.lock
+
+# cloudflare / wrangler
+.wrangler/
+
+# env & logs
+.env
+.env.*
+npm-debug.log*

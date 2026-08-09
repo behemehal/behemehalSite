@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Montserrat", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  background-color: #000000;
+}
+
+/* Consistent heading weight across the whole site */
+h1,
+h2,
+h3 {
+  font-weight: 700;
+}
+
+/* PCB "energy" pulses travelling along circuit traces */
+@keyframes pcb-flow {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+
+.pcb-pulse {
+  stroke-dasharray: 14 340;
+  stroke-dashoffset: 0;
+  animation-name: pcb-flow;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  filter: drop-shadow(0 0 3px rgba(170, 33, 41, 0.9));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pcb-pulse {
+    animation: none;
+  }
+}
