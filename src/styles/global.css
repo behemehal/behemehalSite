@@ -39,3 +39,104 @@ h3 {
     animation: none;
   }
 }
+
+/* ── Store-style app pages ─────────────────────────────────────────────── */
+
+/* Screenshot rail: thin branded scrollbar instead of the OS default */
+.app-rail {
+  scrollbar-width: thin;
+  scrollbar-color: #aa2129 transparent;
+}
+
+.app-rail::-webkit-scrollbar {
+  height: 8px;
+}
+
+.app-rail::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+}
+
+.app-rail::-webkit-scrollbar-thumb {
+  background: #aa2129;
+  border-radius: 999px;
+}
+
+/* Rendered markdown (privacy policies). Tailwind's typography plugin is not
+   installed, so the handful of tags the policies actually use are styled here. */
+.app-prose {
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.75;
+  overflow-wrap: break-word;
+}
+
+.app-prose h2 {
+  color: #ffffff;
+  font-size: 1.875rem;
+  line-height: 1.2;
+  margin-top: 2.5rem;
+  scroll-margin-top: 70px;
+}
+
+.app-prose h2:first-child {
+  margin-top: 0;
+}
+
+.app-prose h3 {
+  color: #ffffff;
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  scroll-margin-top: 70px;
+}
+
+.app-prose p {
+  margin-top: 1rem;
+}
+
+.app-prose strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.app-prose ul {
+  margin-top: 1rem;
+  padding-left: 1.25rem;
+  list-style: none;
+}
+
+.app-prose li {
+  position: relative;
+  margin-top: 0.5rem;
+}
+
+.app-prose li::before {
+  content: "";
+  position: absolute;
+  left: -1rem;
+  top: 0.7em;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background-color: #aa2129;
+}
+
+.app-prose a {
+  color: #e0575f;
+  text-decoration: underline;
+}
+
+.app-prose a:hover {
+  color: #ffffff;
+}
+
+.app-prose hr {
+  margin: 2.5rem 0;
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.app-prose em {
+  color: rgba(255, 255, 255, 0.65);
+  font-style: normal;
+  font-size: 0.875rem;
+}

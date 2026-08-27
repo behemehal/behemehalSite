@@ -15,6 +15,7 @@ export default function Navbar() {
       <div class="flex flex-row items-center ml-auto gap-4 exsm:hidden">
         <a class="text-white hover:text-gray-300 transition-colors" href="/#ellie">Ellie</a>
         <a class="text-white hover:text-gray-300 transition-colors" href="/#projects">Projects</a>
+        <a class="text-white hover:text-gray-300 transition-colors" href="/apps">Games</a>
         <a
           class="flex items-center opacity-90 hover:opacity-100 transition-opacity"
           href="https://github.com/behemehal"

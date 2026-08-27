@@ -10,4 +10,24 @@
 	<lastmod>2022-10-30T01:54:10+01:00</lastmod>
 	<priority>1.0</priority>
 </url>
+<url>
+	<loc>https://behemehal.org/apps</loc>
+	<lastmod>2026-08-27T00:00:00+03:00</lastmod>
+	<priority>0.9</priority>
+</url>
+<url>
+	<loc>https://behemehal.org/apps/com.behemehal.laser</loc>
+	<lastmod>2026-08-27T00:00:00+03:00</lastmod>
+	<priority>0.9</priority>
+</url>
+<url>
+	<loc>https://behemehal.org/apps/com.behemehal.laser/privacy</loc>
+	<lastmod>2026-08-27T00:00:00+03:00</lastmod>
+	<priority>0.5</priority>
+</url>
+<url>
+	<loc>https://behemehal.org/ahmetcan</loc>
+	<lastmod>2026-08-27T00:00:00+03:00</lastmod>
+	<priority>0.5</priority>
+</url>
 </urlset>

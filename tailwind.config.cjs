@@ -20,6 +20,8 @@ module.exports = {
         primary: "#AA2129",
         primaryDark: "#420004",
         techCardColor: "#462B45",
+        // Lifted card background used by the store-style app pages
+        surface: "#141112",
       },
     },
   },

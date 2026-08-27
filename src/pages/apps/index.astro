@@ -1,0 +1,68 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Navbar from "../../components/Navbar.tsx";
+import Footer from "../../components/Footer.tsx";
+import AppTile from "../../components/AppTile.tsx";
+import { APPS } from "../../data/apps.ts";
+
+const games = APPS.filter((app) => app.kind === "game");
+const tools = APPS.filter((app) => app.kind === "app");
+---
+
+<Layout
+  title="Apps & Games — Behemehal"
+  description="Applications and games built by Behemehal — offline-first, no accounts, no real-money purchases."
+  url="https://behemehal.org/apps"
+  keywords="behemehal games,behemehal apps,android"
+>
+  <Navbar client:load />
+
+  <main class="w-full pt-[50px] bg-black min-h-screen">
+    <section class="relative w-full overflow-hidden bg-primaryDark">
+      <div
+        class="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 80% 20%, rgba(170,33,41,0.40), transparent 55%), linear-gradient(to bottom, transparent, rgba(0,0,0,0.85))",
+        }}
+      >
+      </div>
+      <div class="relative z-10 max-w-[1100px] mx-auto px-8 exsm:px-5 pt-10 pb-12">
+        <nav aria-label="Breadcrumb" class="text-sm text-white/60">
+          <a href="/" class="hover:text-white transition-colors">Behemehal</a>
+          <span class="mx-2">/</span>
+          <span class="text-white/90">Apps</span>
+        </nav>
+        <h1 class="text-5xl exsm:text-4xl text-white mt-6">Apps &amp; Games</h1>
+        <p class="text-white/85 mt-4 max-w-[640px]">
+          Things we ship to devices instead of to crates.io. Offline-first, no
+          accounts, and no real-money purchases.
+        </p>
+      </div>
+    </section>
+
+    <section class="w-full bg-black px-8 exsm:px-5 py-14">
+      <div class="max-w-[1100px] mx-auto">
+        {games.length > 0 && (
+          <>
+            <h2 class="text-3xl text-white">Games</h2>
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(320px,480px))] exsm:grid-cols-1 gap-6 mt-6">
+              {games.map((app) => <AppTile app={app} />)}
+            </div>
+          </>
+        )}
+
+        {tools.length > 0 && (
+          <>
+            <h2 class="text-3xl text-white mt-14">Applications</h2>
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(320px,480px))] exsm:grid-cols-1 gap-6 mt-6">
+              {tools.map((app) => <AppTile app={app} />)}
+            </div>
+          </>
+        )}
+      </div>
+    </section>
+  </main>
+
+  <Footer showAttribute />
+</Layout>

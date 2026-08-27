@@ -1,0 +1,140 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Navbar from "../../../components/Navbar.tsx";
+import Footer from "../../../components/Footer.tsx";
+import { APPS } from "../../../data/apps.ts";
+import type { AppEntry } from "../../../data/apps.ts";
+
+/** Privacy policies live next to the catalog: src/policies/<slug>.privacy.md */
+const policies = import.meta.glob("../../../policies/*.privacy.md", { eager: true });
+
+export function getStaticPaths() {
+  return APPS
+    .filter((app) => app.hasPrivacyPolicy)
+    .map((app) => ({ params: { slug: app.slug }, props: { app } }));
+}
+
+interface Props {
+  app: AppEntry;
+}
+
+const { app } = Astro.props;
+
+const policy = policies[`../../../policies/${app.slug}.privacy.md`] as
+  | { Content: any; frontmatter: { lastUpdated?: string } }
+  | undefined;
+
+if (!policy) {
+  throw new Error(
+    `${app.slug} is marked hasPrivacyPolicy but src/policies/${app.slug}.privacy.md is missing`,
+  );
+}
+
+const { Content, frontmatter } = policy;
+const pageUrl = `https://behemehal.org/apps/${app.slug}/privacy`;
+---
+
+<Layout
+  title={`${app.name} Privacy Policy — Behemehal`}
+  description={`How ${app.name} handles your data. ${app.tagline}`}
+  url={pageUrl}
+  image={app.iconPng}
+  keywords={`${app.name} privacy policy,behemehal privacy`}
+>
+  <Navbar client:load />
+
+  <main class="w-full pt-[50px] bg-black">
+    <section class="relative w-full overflow-hidden bg-primaryDark">
+      <div
+        class="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle at 20% 20%, rgba(170,33,41,0.45), transparent 55%), linear-gradient(to bottom, transparent, rgba(0,0,0,0.85))",
+        }}
+      >
+      </div>
+
+      <div class="relative z-10 max-w-[900px] mx-auto px-8 exsm:px-5 pt-8 pb-10">
+        <nav aria-label="Breadcrumb" class="text-sm text-white/60">
+          <a href="/" class="hover:text-white transition-colors">Behemehal</a>
+          <span class="mx-2">/</span>
+          <a href="/apps" class="hover:text-white transition-colors">Apps</a>
+          <span class="mx-2">/</span>
+          <a href={`/apps/${app.slug}`} class="hover:text-white transition-colors">
+            {app.name}
+          </a>
+          <span class="mx-2">/</span>
+          <span class="text-white/90">Privacy</span>
+        </nav>
+
+        <div class="flex items-center gap-5 mt-7 exsm:flex-col exsm:text-center">
+          <img
+            src={app.icon}
+            width={72}
+            height={72}
+            alt={`${app.name} icon`}
+            class="w-[72px] h-[72px] rounded-2xl shrink-0 shadow-xl shadow-black/50"
+          />
+          <div>
+            <h1 class="text-4xl exsm:text-3xl text-white leading-tight">Privacy Policy</h1>
+            <p class="text-white/80 mt-1">
+              {app.name} · {app.developer}
+            </p>
+          </div>
+        </div>
+
+        {frontmatter.lastUpdated && (
+          <p class="text-white/60 text-sm mt-5">
+            Last updated / Son güncelleme: <time datetime={frontmatter.lastUpdated}>
+              {frontmatter.lastUpdated}
+            </time>
+          </p>
+        )}
+
+        <div class="flex flex-wrap gap-3 mt-6">
+          <a
+            href="#english"
+            class="text-white text-sm border border-white/40 hover:bg-white/10 transition-colors rounded-full px-4 py-1.5"
+          >
+            English
+          </a>
+          <a
+            href="#türkçe"
+            class="text-white text-sm border border-white/40 hover:bg-white/10 transition-colors rounded-full px-4 py-1.5"
+          >
+            Türkçe
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="w-full bg-black py-12">
+      <div class="max-w-[900px] mx-auto px-8 exsm:px-5">
+        <article class="app-prose bg-surface border border-white/10 rounded-2xl p-9 exsm:p-5">
+          <Content />
+        </article>
+
+        <div class="flex flex-wrap items-center gap-5 mt-8">
+          <a
+            href={`/apps/${app.slug}`}
+            class="inline-flex items-center gap-2 text-white hover:text-primary transition-colors"
+          >
+            <span class="material-symbols-outlined" style={{ fontSize: "20px" }}>
+              arrow_back
+            </span>
+            Back to {app.name}
+          </a>
+          <a
+            href={`mailto:${app.supportEmail}`}
+            class="inline-flex items-center gap-2 text-white hover:text-primary transition-colors"
+          >
+            <span class="material-symbols-outlined" style={{ fontSize: "20px" }}>mail</span>
+            {app.supportEmail}
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>

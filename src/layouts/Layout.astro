@@ -5,10 +5,16 @@ export interface Props {
   title: string;
   description: string;
   url: string;
+  /** Absolute-from-root path of a page-specific social image. */
+  image?: string;
+  /** Extra keywords appended to the site-wide list. */
+  keywords?: string;
 }
 
-const { title, description, url } = Astro.props;
-const ogImage = new URL("/img/pageimg.png", Astro.site).href;
+const { title, description, url, image, keywords } = Astro.props;
+const ogImage = new URL(image ?? "/img/pageimg.png", Astro.site).href;
+const BASE_KEYWORDS =
+  "behemehal,safeen,ellie,ellie programing language,program,programing language";
 ---
 
 <!doctype html>
@@ -40,7 +46,7 @@ const ogImage = new URL("/img/pageimg.png", Astro.site).href;
     <!-- Search / crawlers -->
     <meta
       name="keywords"
-      content="behemehal,safeen,ellie,ellie programing language,program,programing language"
+      content={keywords ? `${BASE_KEYWORDS},${keywords}` : BASE_KEYWORDS}
     />
     <meta name="robots" content="index, follow" />
     <meta name="copyright" content="Behemehal" />

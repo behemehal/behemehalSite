@@ -40,6 +40,13 @@ export default function MobileMenu() {
           Projects
         </a>
         <a
+          class="mt-2 ml-2 block text-primary text-left text-2xl"
+          href="/apps"
+          onClick={() => setIsOpen(false)}
+        >
+          Games
+        </a>
+        <a
           class="mt-4 ml-2 flex items-center gap-2 text-primary text-left text-xl"
           href="https://github.com/behemehal"
           target="_blank"

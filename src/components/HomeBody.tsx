@@ -3,6 +3,7 @@ import { GitHubIcon } from "./ExtraIcons.tsx";
 import TechCard from "./TechCard.tsx";
 import Footer from "./Footer.tsx";
 import PcbTrace from "./PcbTrace.tsx";
+import GamesSection from "./GamesSection.tsx";
 import { CodeWindow, TerminalWindow } from "./CodeWindow.tsx";
 
 function MatIcon({ name, size = 96, color = "white" }: { name: string; size?: number; color?: string }) {
@@ -280,6 +281,9 @@ export default function HomeBody() {
           </div>
         </div>
       </section>
+
+      {/* Behemehal Games */}
+      <GamesSection />
 
       {/* More open source */}
       <section class="w-full bg-primary px-12 py-16 exsm:text-center">
