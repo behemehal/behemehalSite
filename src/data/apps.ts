@@ -93,7 +93,7 @@ export interface AppEntry {
 export const APPS: AppEntry[] = [
   {
     slug: "com.behemehal.laser",
-    packageName: "com.fonmap.laserrefract",
+    packageName: "com.behemehal.laser",
     name: "L.A.S.E.R",
     tagline:
       "Light Amplification by Stimulated Emission of Radiation. Also: a neon puzzle.",
@@ -236,7 +236,7 @@ export const APPS: AppEntry[] = [
     ],
 
     hasPrivacyPolicy: true,
-    supportEmail: "help@ahmetcanaksu.com",
+    supportEmail: "info@behemehal.org",
   },
 ];
 
