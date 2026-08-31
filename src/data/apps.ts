@@ -106,7 +106,7 @@ export const APPS: AppEntry[] = [
     iconPng: "/img/apps/com.behemehal.laser/icon.png",
     featureGraphic: "/img/apps/com.behemehal.laser/feature.webp",
 
-    playUrl: "null",
+    playUrl: "https://play.google.com/store/apps/details?id=com.behemehal.laser",
     links: [],
 
     screenshots: [
