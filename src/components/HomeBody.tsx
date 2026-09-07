@@ -56,18 +56,26 @@ fn main() {
     println!("{}", String::from_utf8_lossy(&buf));
 }`;
 
-const SAFEEN_CODE = `use safe_en::{table::{TableRow, TypeDefs}, Database};
+const SAFEEN_CODE = `use safe_en::{database, query, row, table::Timestamp};
 
-let mut db = Database::new();
+let mut db = database! {
+    users {
+        id: I64 primary,
+        email: String unique,
+        age: I64 range(0_i64, 150_i64),
+        joined: Timestamp,
+    }
+};
 
-db.create_table("users", vec![
-    TableRow::new("id", TypeDefs::I64),
-    TableRow::new("email", TypeDefs::String),
+db.table("users").unwrap().insert(row![
+    1_i64,
+    "ahmet@mail.com",
+    21_i64,
+    Timestamp::from_millis(1_767_225_600_000),
 ]).unwrap();
 
-db.table("users").unwrap()
-    .insert(vec![1_i64.into(), "ahmet@mail.com".into()])
-    .unwrap();
+let adults = db.table("users").unwrap()
+    .get_where(query!(age >= 18));
 
 db.save("./users.sfn").unwrap();`;
 
@@ -106,6 +114,9 @@ interface FeatureProps {
   icon: string;
   github: string;
   crates?: string;
+  demo?: string;
+  demoLabel?: string;
+  tags?: string[];
   reversed?: boolean;
   children: ComponentChildren;
 }
@@ -122,6 +133,13 @@ function Feature(props: FeatureProps) {
           <LangBadge language={props.language} />
         </div>
         <p class="text-white/90 mt-3 max-w-[460px] exsm:mx-auto">{props.description}</p>
+        {props.tags && (
+          <div class="flex flex-wrap gap-2 mt-4 exsm:justify-center">
+            {props.tags.map((tag) => (
+              <span class="text-white/80 text-xs border border-white/30 rounded-full px-2.5 py-0.5">{tag}</span>
+            ))}
+          </div>
+        )}
         <div class="flex items-center gap-5 mt-5 exsm:justify-center">
           <a href={props.github} target="_blank" rel="noreferrer" class="flex items-center gap-2 text-white hover:opacity-80 transition-opacity">
             <GitHubIcon width={20} height={20} color="white" /> GitHub
@@ -129,6 +147,12 @@ function Feature(props: FeatureProps) {
           {props.crates && (
             <a href={props.crates} target="_blank" rel="noreferrer" class="flex items-center gap-2 text-white hover:opacity-80 transition-opacity">
               <span class="material-symbols-outlined" style={{ fontSize: "20px" }}>deployed_code</span> crates.io
+            </a>
+          )}
+          {props.demo && (
+            <a href={props.demo} target="_blank" rel="noreferrer" class="flex items-center gap-2 text-primary hover:opacity-80 transition-opacity">
+              <span class="material-symbols-outlined" style={{ fontSize: "20px" }}>play_circle</span>
+              {props.demoLabel ?? "Live demo"}
             </a>
           )}
         </div>
@@ -248,9 +272,12 @@ export default function HomeBody() {
               title="SafeEn"
               language="Rust"
               icon="dns"
-              description="A local database for situations that need strict data integrity and absolute portability. Typed tables, simple queries, single-file storage."
+              description="A whole database in one portable file. Every column declares a type, every value is checked before it is stored, and every file carries a checksum — so corruption is reported, never silently loaded. No dependencies, no_std, and it runs in the browser through WebAssembly."
+              tags={["Typed schema", "Durable", "Transactions", "no_std", "WebAssembly"]}
               github="https://github.com/behemehal/SafeEn"
               crates="https://crates.io/crates/safe_en"
+              demo="https://behemehal.github.io/SafeEn/"
+              demoLabel="Try it in your browser"
               reversed
             >
               <CodeWindow filename="main.rs" code={SAFEEN_CODE} />
