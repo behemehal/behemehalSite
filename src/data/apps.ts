@@ -29,7 +29,9 @@ export interface AppSection {
 
 /** One cell of the Play-style strip under the install buttons. */
 export interface AppStat {
-  value: string;
+  /** Optional because `icon` replaces it — which is what the renderer already did,
+   *  while the type still insisted on both. */
+  value?: string;
   label: string;
   /** Material Symbols name, used instead of `value` when set. */
   icon?: string;
@@ -67,6 +69,18 @@ export interface AppEntry {
   icon: string;
   iconPng: string;
   featureGraphic?: string;
+
+  /**
+   * What it runs on. Defaults to Android, which is everything here shipped to before
+   * QuicKV. Drives the JSON-LD and decides whether a missing store link should read
+   * as "coming soon to Google Play" or as nothing at all.
+   */
+  platforms?: string[];
+  /**
+   * The shape of the screenshots. Phone apps are portrait; a desktop app is not, and
+   * cropping one into a 9:16 frame throws away the screen.
+   */
+  orientation?: "portrait" | "landscape";
 
   /** Google Play listing URL. `null` while the app is not public yet. */
   playUrl: string | null;
@@ -236,6 +250,171 @@ export const APPS: AppEntry[] = [
     ],
 
     hasPrivacyPolicy: true,
+    supportEmail: "info@behemehal.org",
+  },
+
+  {
+    slug: "quickv",
+    packageName: "com.quickv.desktop",
+    name: "QuicKV",
+    tagline:
+      "A desktop client for Redis, built around the part that is actually hard — finding the key you want.",
+    kind: "app",
+    category: "Developer tools",
+    developer: "Behemehal",
+    tags: ["Desktop", "Local-first", "No account"],
+
+    icon: "/img/apps/quickv/icon.webp",
+    iconPng: "/img/apps/quickv/icon.png",
+    featureGraphic: "/img/apps/quickv/feature.webp",
+    platforms: ["macOS", "Windows", "Linux"],
+    orientation: "landscape",
+
+    playUrl: null,
+    links: [
+      {
+        label: "Source on GitHub",
+        href: "https://github.com/ahmetcanaksu/QuicKV",
+        icon: "code",
+      },
+    ],
+
+    screenshots: [
+      {
+        src: "/img/apps/quickv/screenshots/01-keys.webp",
+        caption: "The key browser, folded into folders on the keyspace's own separator",
+      },
+      {
+        src: "/img/apps/quickv/screenshots/06-value-dark.webp",
+        caption: "A typed editor per value type, paged — here a hash, in the dark theme",
+      },
+      {
+        src: "/img/apps/quickv/screenshots/02-namespaces.webp",
+        caption:
+          "A keyspace report: what is in a database you have never opened, and which prefixes are worth saving",
+      },
+      {
+        src: "/img/apps/quickv/screenshots/03-hot.webp",
+        caption:
+          "Hot keys from two sources shown side by side — the server's own counter, and what you have opened",
+      },
+      {
+        src: "/img/apps/quickv/screenshots/04-channels.webp",
+        caption: "Pub/sub channels and keyspace events, live",
+      },
+      {
+        src: "/img/apps/quickv/screenshots/05-scans.webp",
+        caption: "Saved searches, and saved keys that open straight to their value",
+      },
+      {
+        src: "/img/apps/quickv/screenshots/07-server.webp",
+        caption: "What the server is, and what it can actually do",
+      },
+    ],
+
+    about: [
+      "Most Redis clients can tell you whether a pattern matches something. QuicKV is built for the question people actually arrive with, which is that they do not know what the patterns are.",
+      "It walks the keyspace, groups it by the separator the keys already use, and shows you what is in there — how many keys under each prefix, how many bytes, and which types. Then it offers the prefixes worth keeping as saved searches.",
+      "Everything is done with SCAN. KEYS appears nowhere in the app, because on a database large enough to want a browser for, KEYS blocks the server for as long as its reply takes to build.",
+    ],
+
+    sections: [
+      {
+        heading: "Find the key",
+        items: [
+          "Glob search with a type filter — a bare word is widened to match anywhere, and the bar says so",
+          "A folder tree on the connection's own separator, or a flat list — both views of one scan, so the toggle costs no round trip",
+          "A keyspace report that says what is in a database, by prefix, by type and by size",
+          "Saved searches, and saved keys that open straight to their value",
+          "Hot keys: the server's own access counter where the policy keeps one, and a local record of what you have opened — shown side by side, never averaged",
+        ],
+      },
+      {
+        heading: "Read and change it",
+        items: [
+          "A typed editor for strings, hashes, lists, sets, sorted sets, streams and RedisJSON",
+          "Every value is paged, so a four-million-element list opens as fast as a small one",
+          "Values that are not UTF-8 are shown escaped and held read-only, rather than quietly corrupted",
+          "Pub/sub: subscribe to channels or patterns, watch messages arrive, publish from the same screen",
+          "Keyspace notifications in one click, with an honest warning about what turning them on costs the server",
+          "A command line for whatever has no button",
+        ],
+      },
+      {
+        heading: "Hard to break something with",
+        items: [
+          "Read-only connections refuse every write, including from the command line — the server itself is asked which of its commands write",
+          "A colour per connection, carried the full width of the title bar",
+          "FLUSHALL, FLUSHDB, SWAPDB, SHUTDOWN, DEBUG and KEYS are held back behind a setting",
+          "Deleting a folder says whether that is every key under the prefix or only the ones loaded",
+          "Removing a TTL uses PERSIST, not a zero expiry — which would delete the key",
+        ],
+      },
+      {
+        heading: "Yours, on your machine",
+        items: [
+          "No account, no telemetry, no cloud — it talks to the servers you tell it to and nothing else",
+          "Passwords live in the OS keychain and are read once per launch, on connect",
+          "Connections and saved searches are readable JSON files you can commit or copy between machines",
+          "Redis, and by the same code Valkey and DragonflyDB",
+          "Six themes, light and dark, warm and cool",
+        ],
+      },
+    ],
+
+    stats: [
+      { value: "Redis 4+", label: "Valkey & Dragonfly too" },
+      { value: "SCAN", label: "Never blocks the server" },
+      { value: "7", label: "Value types" },
+      { icon: "vpn_key", label: "Keychain passwords" },
+    ],
+
+    contentRating: {
+      label: "Everyone",
+      detail:
+        "A developer tool. No accounts, no advertising, no purchases, and nothing that renders untrusted content.",
+    },
+
+    dataSafety: [
+      {
+        icon: "cloud_off",
+        title: "Nothing is sent anywhere",
+        body:
+          "QuicKV connects to the servers you configure and to nothing else. There is no account, no telemetry, no crash reporting and no update check.",
+      },
+      {
+        icon: "vpn_key",
+        title: "Passwords live in the OS keychain",
+        body:
+          "Never in a file. They are read once per launch, when a connection is opened — not when a list is drawn — and a connection with no password never touches the keychain at all.",
+      },
+      {
+        icon: "folder",
+        title: "Your settings are plain files",
+        body:
+          "Connections and saved searches are readable JSON in the app's data directory, safe to copy between machines because the secrets are not in them.",
+      },
+      {
+        icon: "history",
+        title: "A local record of what you opened",
+        body:
+          "Which keys you have opened is kept in a local SQLite file to power the hot list. It never leaves the machine, and it can be cleared per connection or switched off.",
+      },
+    ],
+
+    info: [
+      { label: "Version", value: "0.1.0" },
+      { label: "Requires", value: "macOS, Windows or Linux" },
+      { label: "Speaks", value: "Redis, Valkey, DragonflyDB" },
+      { label: "Category", value: "Developer tools" },
+      { label: "Offered by", value: "Behemehal" },
+      { label: "Built with", value: "Tauri 2, Rust, React" },
+      { label: "In-app purchases", value: "None" },
+      { label: "Ads", value: "None" },
+      { label: "Languages", value: "English" },
+    ],
+
+    hasPrivacyPolicy: false,
     supportEmail: "info@behemehal.org",
   },
 ];

@@ -17,6 +17,17 @@ const { app } = Astro.props;
 const kind = app.kind === "game" ? "game" : "app";
 const pageUrl = `https://behemehal.org/apps/${app.slug}`;
 
+// Everything here shipped to Android until QuicKV, so that stays the default.
+const platforms = app.platforms ?? ["Android"];
+const isMobile = platforms.some((os) => os === "Android" || os === "iOS");
+// Desktop screenshots are landscape; a phone's are not, and one frame cannot serve
+// both without cropping the screen out of one of them.
+const landscape = app.orientation === "landscape";
+// Wider than a phone shot needs to be: a desktop UI at 560px is a picture of a
+// window rather than something you can read. The rail scrolls either way.
+const shotWidth = landscape ? 680 : 248;
+const shotHeight = landscape ? 425 : 441;
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": app.kind === "game" ? "VideoGame" : "SoftwareApplication",
@@ -24,9 +35,13 @@ const jsonLd = {
   description: app.tagline,
   url: pageUrl,
   image: new URL(app.iconPng, Astro.site).href,
-  applicationCategory: app.kind === "game" ? "GameApplication" : "MobileApplication",
+  applicationCategory: app.kind === "game"
+    ? "GameApplication"
+    : isMobile
+      ? "MobileApplication"
+      : "DeveloperApplication",
   applicationSubCategory: app.category,
-  operatingSystem: "Android",
+  operatingSystem: platforms.join(", "),
   author: { "@type": "Organization", name: app.developer, url: "https://behemehal.org" },
   publisher: { "@type": "Organization", name: app.developer, url: "https://behemehal.org" },
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -40,7 +55,7 @@ const jsonLd = {
   description={app.tagline}
   url={pageUrl}
   image={app.featureGraphic ? app.featureGraphic.replace(".webp", ".png") : app.iconPng}
-  keywords={`${app.name},behemehal games,${app.category},android ${kind}`}
+  keywords={`${app.name},behemehal,${app.category},${platforms.join(" ").toLowerCase()} ${kind}`}
 >
   <Navbar client:load />
 
@@ -121,14 +136,16 @@ const jsonLd = {
                 />
               </a>
             )
-            : (
+            : isMobile
+            ? (
               <span class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/85 px-5 py-3 rounded-md">
                 <span class="material-symbols-outlined" style={{ fontSize: "20px" }}>
                   hourglass_top
                 </span>
                 Coming soon to Google Play
               </span>
-            )}
+            )
+            : null}
 
           {app.links.map((link) => (
             <a
@@ -175,15 +192,22 @@ const jsonLd = {
           <h2 class="text-2xl text-white px-8 exsm:px-5">Screenshots</h2>
           <div class="app-rail flex gap-4 overflow-x-auto snap-x snap-mandatory px-8 exsm:px-5 pt-5 pb-4">
             {app.screenshots.map((shot) => (
-              <figure class="snap-center shrink-0">
+              <figure class="snap-center shrink-0" style={{ width: `${shotWidth}px` }}>
                 <img
                   src={shot.src}
-                  width={248}
-                  height={441}
+                  width={shotWidth}
+                  height={shotHeight}
                   loading="lazy"
                   alt={shot.caption}
-                  class="w-[248px] h-[441px] rounded-2xl border border-white/10 bg-primaryDark"
+                  class="rounded-2xl border border-white/10 bg-primaryDark w-full h-auto"
                 />
+                {/* A desktop screenshot is dense enough that the caption is doing real
+                    work; on a phone shot the picture says it already. */}
+                {landscape && (
+                  <figcaption class="text-white/60 text-xs mt-3 leading-relaxed">
+                    {shot.caption}
+                  </figcaption>
+                )}
               </figure>
             ))}
           </div>

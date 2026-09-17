@@ -11,6 +11,15 @@ export interface AppTileProps {
  * the /apps index — the whole card is one link to the detail page.
  */
 export default function AppTile({ app, showPreview = true }: AppTileProps) {
+  // Desktop apps ship landscape screenshots; forcing them into the 9:16 frame a
+  // phone app uses crops away the whole screen.
+  const landscape = app.orientation === "landscape";
+  // Two landscape thumbnails fit the card; three overflowed it and the last one was
+  // cut off by the card's own edge.
+  const previewClass = landscape
+    ? "w-[200px] h-[125px] object-cover rounded-lg border border-white/10 shrink-0"
+    : "w-[96px] h-[171px] object-cover rounded-lg border border-white/10 shrink-0";
+
   return (
     <a
       href={`/apps/${app.slug}`}
@@ -44,21 +53,21 @@ export default function AppTile({ app, showPreview = true }: AppTileProps) {
 
       {showPreview && app.screenshots.length > 0 && (
         <div class="flex gap-2 mt-5 overflow-hidden">
-          {app.screenshots.slice(0, 4).map((shot) => (
+          {app.screenshots.slice(0, landscape ? 2 : 4).map((shot) => (
             <img
               src={shot.src}
-              width={96}
-              height={171}
+              width={landscape ? 200 : 96}
+              height={landscape ? 125 : 171}
               loading="lazy"
               alt={shot.caption}
-              class="w-[96px] h-[171px] object-cover rounded-lg border border-white/10 shrink-0"
+              class={previewClass}
             />
           ))}
         </div>
       )}
 
       <span class="inline-flex items-center gap-1 text-white mt-5 text-sm group-hover:gap-2 transition-all">
-        {app.playUrl ? "View on Behemehal" : "Details & coming soon"}
+        {app.playUrl || app.links.length > 0 ? "View on Behemehal" : "Details & coming soon"}
         <span class="material-symbols-outlined" style={{ fontSize: "18px" }}>
           arrow_forward
         </span>
