@@ -258,11 +258,11 @@ export const APPS: AppEntry[] = [
     packageName: "com.quickv.desktop",
     name: "QuicKV",
     tagline:
-      "A desktop client for Redis, built around the part that is actually hard — finding the key you want.",
+      "See the shape of your keyspace — not just a list of keys. Redis, Valkey and DragonflyDB, with more stores on the way.",
     kind: "app",
     category: "Developer tools",
     developer: "Behemehal",
-    tags: ["Desktop", "Local-first", "No account"],
+    tags: ["Desktop", "Local-first", "No account", "More stores soon"],
 
     icon: "/img/apps/quickv/icon.webp",
     iconPng: "/img/apps/quickv/icon.png",
@@ -271,13 +271,7 @@ export const APPS: AppEntry[] = [
     orientation: "landscape",
 
     playUrl: null,
-    links: [
-      {
-        label: "Source on GitHub",
-        href: "https://github.com/ahmetcanaksu/QuicKV",
-        icon: "code",
-      },
-    ],
+    links: [],
 
     screenshots: [
       {
@@ -313,6 +307,7 @@ export const APPS: AppEntry[] = [
     ],
 
     about: [
+      "A keyspace is a shape, and most clients show you a list. QuicKV shows you the shape.",
       "Most Redis clients can tell you whether a pattern matches something. QuicKV is built for the question people actually arrive with, which is that they do not know what the patterns are.",
       "It walks the keyspace, groups it by the separator the keys already use, and shows you what is in there — how many keys under each prefix, how many bytes, and which types. Then it offers the prefixes worth keeping as saved searches.",
       "Everything is done with SCAN. KEYS appears nowhere in the app, because on a database large enough to want a browser for, KEYS blocks the server for as long as its reply takes to build.",
@@ -355,9 +350,17 @@ export const APPS: AppEntry[] = [
         items: [
           "No account, no telemetry, no cloud — it talks to the servers you tell it to and nothing else",
           "Passwords live in the OS keychain and are read once per launch, on connect",
-          "Connections and saved searches are readable JSON files you can commit or copy between machines",
+          "Connections and saved searches are readable JSON files you can copy between machines",
           "Redis, and by the same code Valkey and DragonflyDB",
           "Six themes, light and dark, warm and cool",
+        ],
+      },
+      {
+        heading: "More stores on the way",
+        items: [
+          "The backend is a trait, not a pile of Redis calls — every screen asks for a key, a value or a page, and none of them know what answered",
+          "Which means a new store is one module, not a rewrite of the app around it",
+          "Next up are the key-value stores people run beside Redis rather than instead of it",
         ],
       },
     ],
@@ -367,6 +370,7 @@ export const APPS: AppEntry[] = [
       { value: "SCAN", label: "Never blocks the server" },
       { value: "7", label: "Value types" },
       { icon: "vpn_key", label: "Keychain passwords" },
+      { value: "Soon", label: "More key-value stores" },
     ],
 
     contentRating: {
@@ -404,8 +408,9 @@ export const APPS: AppEntry[] = [
 
     info: [
       { label: "Version", value: "0.1.0" },
+      { label: "Availability", value: "In development — not yet released" },
       { label: "Requires", value: "macOS, Windows or Linux" },
-      { label: "Speaks", value: "Redis, Valkey, DragonflyDB" },
+      { label: "Speaks", value: "Redis, Valkey, DragonflyDB — more on the way" },
       { label: "Category", value: "Developer tools" },
       { label: "Offered by", value: "Behemehal" },
       { label: "Built with", value: "Tauri 2, Rust, React" },
@@ -423,3 +428,6 @@ export const getApp = (slug: string): AppEntry | undefined =>
   APPS.find((app) => app.slug === slug);
 
 export const GAMES = APPS.filter((app) => app.kind === "game");
+
+/** Everything that is not a game — the home page's "Behemehal Apps" band. */
+export const TOOLS = APPS.filter((app) => app.kind === "app");

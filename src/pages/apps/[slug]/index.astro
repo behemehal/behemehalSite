@@ -136,16 +136,14 @@ const jsonLd = {
                 />
               </a>
             )
-            : isMobile
-            ? (
+            : (
               <span class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/85 px-5 py-3 rounded-md">
                 <span class="material-symbols-outlined" style={{ fontSize: "20px" }}>
                   hourglass_top
                 </span>
-                Coming soon to Google Play
+                {isMobile ? "Coming soon to Google Play" : "Coming soon"}
               </span>
-            )
-            : null}
+            )}
 
           {app.links.map((link) => (
             <a

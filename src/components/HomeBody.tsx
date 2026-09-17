@@ -3,6 +3,7 @@ import { GitHubIcon } from "./ExtraIcons.tsx";
 import TechCard from "./TechCard.tsx";
 import Footer from "./Footer.tsx";
 import PcbTrace from "./PcbTrace.tsx";
+import AppsSection from "./AppsSection.tsx";
 import GamesSection from "./GamesSection.tsx";
 import { CodeWindow, TerminalWindow } from "./CodeWindow.tsx";
 
@@ -308,6 +309,9 @@ export default function HomeBody() {
           </div>
         </div>
       </section>
+
+      {/* Behemehal Apps */}
+      <AppsSection />
 
       {/* Behemehal Games */}
       <GamesSection />
