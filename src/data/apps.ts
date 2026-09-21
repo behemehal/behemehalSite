@@ -348,7 +348,7 @@ export const APPS: AppEntry[] = [
       {
         heading: "Yours, on your machine",
         items: [
-          "No account, no telemetry, no cloud — it talks to the servers you tell it to, and to nothing else unless you turn the update check on",
+          "No account, no telemetry, no cloud — it talks to the servers you tell it to, and to behemehal.org only to ask for a version number",
           "Passwords live in the OS keychain and are read once per launch, on connect",
           "Connections and saved searches are readable JSON files you can copy between machines",
           "Redis, and by the same code Valkey and DragonflyDB",
@@ -384,7 +384,7 @@ export const APPS: AppEntry[] = [
         icon: "cloud_off",
         title: "Nothing is sent anywhere",
         body:
-          "QuicKV connects to the servers you configure and to nothing else. No account, no telemetry, no crash reporting. It can reach exactly one other address — behemehal.org, to ask whether there is a newer version — and only when you press the button or switch that check on.",
+          "No account, no telemetry, no crash reporting. Besides the servers you configure, QuicKV reaches exactly one address: behemehal.org, to ask whether there is a newer version. That request carries no identifier and says nothing about you, your machine or your servers, and it can be switched off in Settings.",
       },
       {
         icon: "vpn_key",
