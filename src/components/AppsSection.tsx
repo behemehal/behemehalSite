@@ -45,9 +45,8 @@ export default function AppsSection() {
             <h2 class="text-4xl exsm:text-3xl text-white">Behemehal Apps</h2>
           </div>
           <p class="text-white/80 text-lg mt-4 max-w-[520px] exsm:mx-auto">
-            Tools we built because we wanted them on our own machines. Local-first,
-            no accounts, and nothing phoning home — the same rule as the games, minus
-            the neon.
+            Desktop tools, built for our own work. Local-first, no accounts, nothing
+            phoning home.
           </p>
           <a
             href="/apps"
