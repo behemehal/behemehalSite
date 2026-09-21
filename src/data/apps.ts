@@ -286,7 +286,8 @@ export const APPS: AppEntry[] = [
     featureGraphic: "/img/apps/quickv/feature.webp",
     platforms: ["macOS", "Windows", "Linux"],
     orientation: "landscape",
-    releases: { repo: "ahmetcanaksu/QuicKV" },
+    // Beta tags until there is a stable release to point at.
+    releases: { repo: "ahmetcanaksu/QuicKV", allowPrerelease: true },
 
     playUrl: null,
     links: [],
