@@ -367,8 +367,7 @@ export const APPS: AppEntry[] = [
         heading: "Yours, on your machine",
         items: [
           "No account, no telemetry, no cloud — it talks to the servers you tell it to, and to behemehal.org only to ask for a version number",
-          "Passwords live in the OS keychain and are read once per launch, on connect",
-          "Connections and saved searches are readable JSON files you can copy between machines",
+          "Passwords are encrypted on your machine and never leave it",
           "Redis, and by the same code Valkey and DragonflyDB",
           "Six themes, light and dark, warm and cool",
         ],
@@ -387,7 +386,7 @@ export const APPS: AppEntry[] = [
       { value: "Redis 4+", label: "Valkey & Dragonfly too" },
       { value: "SCAN", label: "Never blocks the server" },
       { value: "7", label: "Value types" },
-      { icon: "vpn_key", label: "Keychain passwords" },
+      { icon: "vpn_key", label: "Passwords stay local" },
       { value: "Soon", label: "More key-value stores" },
     ],
 
@@ -406,21 +405,15 @@ export const APPS: AppEntry[] = [
       },
       {
         icon: "vpn_key",
-        title: "Passwords live in the OS keychain",
+        title: "Passwords stay on your machine",
         body:
-          "Read once per launch, when a connection is opened, and never when a list is drawn. A connection with no password never touches the keychain. Where the keychain will not stop asking, a connection can keep its password in a file only your account can read instead; the app says plainly that this one is not encrypted.",
-      },
-      {
-        icon: "folder",
-        title: "Your settings are plain files",
-        body:
-          "Connections and saved searches are readable JSON in the app's data directory, safe to copy between machines because the secrets are not in them.",
+          "Encrypted, and tied to the computer they were saved on. They are read when a connection is opened and at no other time.",
       },
       {
         icon: "history",
         title: "A local record of what you opened",
         body:
-          "Which keys you have opened is kept in a local SQLite file to power the hot list. It never leaves the machine, and it can be cleared per connection or switched off.",
+          "Which keys you have opened is remembered locally, to power the hot list. It never leaves the machine, and it can be cleared per connection or switched off.",
       },
     ],
 
