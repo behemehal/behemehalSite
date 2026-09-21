@@ -408,7 +408,7 @@ export const APPS: AppEntry[] = [
         icon: "vpn_key",
         title: "Passwords live in the OS keychain",
         body:
-          "Never in a file. They are read once per launch, when a connection is opened — not when a list is drawn — and a connection with no password never touches the keychain at all.",
+          "Read once per launch, when a connection is opened, and never when a list is drawn. A connection with no password never touches the keychain. Where the keychain will not stop asking, a connection can keep its password in a file only your account can read instead; the app says plainly that this one is not encrypted.",
       },
       {
         icon: "folder",
