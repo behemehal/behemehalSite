@@ -15,3 +15,6 @@ deno.lock
 .env
 .env.*
 npm-debug.log*
+
+# Cloudflare Pages local secrets
+.dev.vars
