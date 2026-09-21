@@ -8,17 +8,41 @@
 
 export interface Env {
   /**
-   * A GitHub fine-grained token with **Contents: read** on the release repository,
+   * A GitHub fine-grained token with **Contents: read** on the release repositories,
    * and nothing else. Set as a Pages secret:
    *
    *   wrangler pages secret put GITHUB_TOKEN
    *
    * It never reaches the browser. Its whole job is to turn a private repository's
-   * releases into something public, which is the only reason this endpoint exists.
+   * releases into something public, which is the only reason these endpoints exist.
+   *
+   * One token covers every repository it is scoped to, so most of the time this is
+   * the only secret there is.
    */
   GITHUB_TOKEN?: string;
-  /** `owner/repo`. Overridable so a fork or a rename needs no code change. */
-  RELEASES_REPO?: string;
+
+  /**
+   * A token for one owner, when the default cannot cover it.
+   *
+   * A fine-grained PAT belongs to a single account or organisation and can only
+   * reach repositories there. So the moment apps live under more than one owner —
+   * say `ahmetcanaksu/QuicKV` and `behemehal/something` — one token is not enough.
+   * `GITHUB_TOKEN_BEHEMEHAL` is used for repositories owned by `behemehal`, and the
+   * default for everything else. No code changes when that day comes.
+   */
+  [perOwnerToken: string]: string | undefined;
+}
+
+/**
+ * The token to use for a repository: the owner's, if one is set, else the default.
+ *
+ * `behemehal/site` looks for `GITHUB_TOKEN_BEHEMEHAL`. Anything not a letter or a
+ * digit becomes an underscore, because a hyphenated owner cannot be an env var name.
+ */
+export function tokenFor(env: Env, repo: string): string | undefined {
+  const owner = repo.split("/")[0] ?? "";
+  const key = `GITHUB_TOKEN_${owner.toUpperCase().replace(/[^A-Z0-9]/g, "_")}`;
+  return env[key] ?? env.GITHUB_TOKEN;
 }
 
 export interface Ctx {
@@ -28,16 +52,19 @@ export interface Ctx {
   waitUntil(promise: Promise<unknown>): void;
 }
 
-export const DEFAULT_REPO = "ahmetcanaksu/QuicKV";
-
 /** GitHub rejects requests with no User-Agent, and wants an explicit API version. */
-export function githubHeaders(env: Env, accept = "application/vnd.github+json"): HeadersInit {
+export function githubHeaders(
+  env: Env,
+  repo: string,
+  accept = "application/vnd.github+json",
+): HeadersInit {
   const headers: Record<string, string> = {
     Accept: accept,
     "User-Agent": "behemehal.org-releases",
     "X-GitHub-Api-Version": "2022-11-28",
   };
-  if (env.GITHUB_TOKEN) headers.Authorization = `Bearer ${env.GITHUB_TOKEN}`;
+  const token = tokenFor(env, repo);
+  if (token) headers.Authorization = `Bearer ${token}`;
   return headers;
 }
 

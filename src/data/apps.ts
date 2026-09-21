@@ -82,6 +82,23 @@ export interface AppEntry {
    */
   orientation?: "portrait" | "landscape";
 
+  /**
+   * Where this app's releases live, when it has any.
+   *
+   * Set it and `/api/version/<slug>` starts answering for this app, with downloads
+   * at `/api/download/<slug>/…`. The repository may be private — publishing the
+   * binaries of a closed-source app is the reason those endpoints exist.
+   *
+   * This is the only place a repository is named. The functions read the catalog, so
+   * adding an app is still one entry here and nothing else.
+   */
+  releases?: {
+    /** `owner/repo`. */
+    repo: string;
+    /** Offer pre-releases when there is no stable release yet. */
+    allowPrerelease?: boolean;
+  };
+
   /** Google Play listing URL. `null` while the app is not public yet. */
   playUrl: string | null;
   /** Anything else worth linking: source, website, itch, App Store… */
@@ -269,6 +286,7 @@ export const APPS: AppEntry[] = [
     featureGraphic: "/img/apps/quickv/feature.webp",
     platforms: ["macOS", "Windows", "Linux"],
     orientation: "landscape",
+    releases: { repo: "ahmetcanaksu/QuicKV" },
 
     playUrl: null,
     links: [],
@@ -407,7 +425,6 @@ export const APPS: AppEntry[] = [
     ],
 
     info: [
-      { label: "Version", value: "0.1.0" },
       { label: "Availability", value: "In development — not yet released" },
       { label: "Requires", value: "macOS, Windows or Linux" },
       { label: "Speaks", value: "Redis, Valkey, DragonflyDB — more on the way" },
@@ -431,3 +448,11 @@ export const GAMES = APPS.filter((app) => app.kind === "game");
 
 /** Everything that is not a game — the home page's "Behemehal Apps" band. */
 export const TOOLS = APPS.filter((app) => app.kind === "app");
+
+/**
+ * The app `/api/version` answers for when no slug is given.
+ *
+ * It exists so the first app's clients, which were built against the un-slugged
+ * route, keep working. New apps should use `/api/version/<slug>`.
+ */
+export const DEFAULT_RELEASE_SLUG = "quickv";

@@ -1,63 +1,66 @@
-import {
-  DEFAULT_REPO,
-  githubHeaders,
-  problem,
-  type Ctx,
-  type GithubRelease,
-} from "../../_shared";
+import { releaseSource } from "../../_apps";
+import { isFailure, latestRelease, notVisible } from "../../_release";
+import { githubHeaders, problem, type Ctx, type GithubRelease } from "../../_shared";
 
 /**
  * A public download for a private repository's release asset.
  *
- *   GET /api/download/<tag>/<asset name>
+ *   GET /api/download/<app>/<tag>/<asset name>
  *
- * GitHub will not serve a private repo's asset without a token, and a token cannot
- * ship inside a desktop app. So this swaps ours for GitHub's: it asks for the asset
- * with `redirect: manual`, GitHub answers 302 with a short-lived signed URL that
- * carries no credentials of ours, and we hand that straight to the browser.
+ * GitHub serves neither a private repo's metadata nor its files without a token, and
+ * a token cannot ship inside an app. So this swaps ours for GitHub's: it asks for
+ * the asset with `redirect: manual`, GitHub answers 302 with a short-lived signed URL
+ * carrying none of our credentials, and we hand that to the browser.
  *
- * The bytes never pass through here — the redirect is the point. Proxying a 200MB
- * installer through a Worker would be slower for the user and would bill us for the
- * privilege.
+ * The bytes never pass through here. Proxying a 200MB installer through a Worker
+ * would be slower for the user and billed to us.
  *
- * The asset is looked up **by name in the release's own asset list**, and the id
- * from that list is what gets used. Nothing the caller sends is ever interpolated
- * into a GitHub path, so there is no way to point this at another repository or at
- * anything that is not a release asset.
+ * The asset is found **by name in that release's own asset list** and fetched by the
+ * id from it, so nothing a caller sends is interpolated into a GitHub path. There is
+ * no way to point this at another repository or at anything but a release asset.
  */
 export async function onRequestGet(ctx: Ctx): Promise<Response> {
-  const { env } = ctx;
   const parts = ([] as string[]).concat(ctx.params.path ?? []);
-  if (parts.length !== 2) {
-    return problem(400, "Expected /api/download/<tag>/<asset>.");
+  if (parts.length !== 3) {
+    return problem(400, "Expected /api/download/<app>/<tag>/<asset>.");
   }
-  const [tag, assetName] = parts;
+  const [slug, tag, assetName] = parts;
 
-  const repo = env.RELEASES_REPO ?? DEFAULT_REPO;
-  const byTag = await fetch(
-    `https://api.github.com/repos/${repo}/releases/tags/${encodeURIComponent(tag)}`,
-    { headers: githubHeaders(env), cf: { cacheTtl: 300, cacheEverything: true } } as RequestInit,
-  );
-  if (byTag.status === 404 || byTag.status === 401) {
-    // Same reasoning as /api/version: without the secret a private repo is
-    // indistinguishable from one that does not exist, so say which is likelier.
-    return problem(
-      env.GITHUB_TOKEN ? 404 : 503,
-      env.GITHUB_TOKEN
-        ? "No release with that tag."
-        : "No GITHUB_TOKEN is set, so a private repository looks like a missing one.",
+  const source = releaseSource(slug);
+  if (!source) return problem(404, `No app called "${slug}" publishes releases.`);
+
+  // `latest` resolves to the same release `/api/version` just advertised, so a link
+  // that says "latest" cannot drift to a different build between the two calls.
+  let release: GithubRelease;
+  if (tag === "latest") {
+    const found = await latestRelease(ctx.env, source);
+    if (isFailure(found)) return found.failure;
+    release = found.release;
+  } else {
+    const byTag = await fetch(
+      `https://api.github.com/repos/${source.repo}/releases/tags/${encodeURIComponent(tag)}`,
+      {
+        headers: githubHeaders(ctx.env, source.repo),
+        cf: { cacheTtl: 300, cacheEverything: true },
+      } as RequestInit,
     );
+    if (byTag.status === 404 || byTag.status === 401) {
+      return notVisible(ctx.env, source, "No release with that tag.");
+    }
+    if (!byTag.ok) return problem(502, `GitHub said ${byTag.status}.`);
+    release = (await byTag.json()) as GithubRelease;
   }
-  if (!byTag.ok) return problem(502, `GitHub said ${byTag.status}.`);
 
-  const release = (await byTag.json()) as GithubRelease;
   const asset = release.assets.find((candidate) => candidate.name === assetName);
   if (!asset) return problem(404, "That release has no asset by that name.");
 
-  const signed = await fetch(`https://api.github.com/repos/${repo}/releases/assets/${asset.id}`, {
-    headers: githubHeaders(env, "application/octet-stream"),
-    redirect: "manual",
-  });
+  const signed = await fetch(
+    `https://api.github.com/repos/${source.repo}/releases/assets/${asset.id}`,
+    {
+      headers: githubHeaders(ctx.env, source.repo, "application/octet-stream"),
+      redirect: "manual",
+    },
+  );
 
   const location = signed.headers.get("location");
   if (signed.status >= 300 && signed.status < 400 && location) {
@@ -65,17 +68,17 @@ export async function onRequestGet(ctx: Ctx): Promise<Response> {
       status: 302,
       headers: {
         location,
-        // The signed URL expires in minutes, so this must not be cached as if it
-        // were a permanent address for the asset.
+        // The signed URL expires in minutes, so this must not be cached as though
+        // it were a permanent address for the asset.
         "cache-control": "no-store",
         "access-control-allow-origin": "*",
       },
     });
   }
 
-  // GitHub answered with the bytes instead of a redirect. Rare, but passing them
-  // through is better than failing — the alternative is a download that works
-  // everywhere except the one time GitHub changes its mind.
+  // GitHub answered with bytes instead of a redirect. Rare, but passing them through
+  // beats failing — the alternative is a download that works every time except the
+  // one time GitHub changes its mind.
   if (signed.ok) {
     return new Response(signed.body, {
       status: 200,

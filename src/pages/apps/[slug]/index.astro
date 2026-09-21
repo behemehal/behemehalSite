@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import Navbar from "../../../components/Navbar.tsx";
 import Footer from "../../../components/Footer.tsx";
+import ReleaseInfo from "../../../components/ReleaseInfo.tsx";
 import { APPS } from "../../../data/apps.ts";
 import type { AppEntry } from "../../../data/apps.ts";
 
@@ -135,6 +136,20 @@ const jsonLd = {
                   class="w-[200px] h-auto"
                 />
               </a>
+            )
+            : app.releases
+            ? (
+              <>
+                {/* Versions cannot be baked into a static page without redeploying
+                    on every release, so they are fetched. Without JavaScript the
+                    noscript below says the honest static thing. */}
+                <ReleaseInfo client:load slug={app.slug} />
+                <noscript>
+                  <span class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/85 px-5 py-3 rounded-md">
+                    Downloads need JavaScript — or ask us at {app.supportEmail}.
+                  </span>
+                </noscript>
+              </>
             )
             : (
               <span class="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/85 px-5 py-3 rounded-md">
