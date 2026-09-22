@@ -485,9 +485,9 @@ export const APPS: AppEntry[] = [
 
     about: [
       "Envelope is a program on your computer. No cloud, no account, nothing to sign in to, and free forever.",
-      "A collection is a folder of plain JSON files. You can read it, diff it in a pull request, and commit it beside the code it tests — it is yours, on your disk, in a directory you chose.",
-      "It keeps the request editor you already know and fixes the parts that never worked: every variable shows which layer it came from, so “why is this going to the wrong server” is a question you answer by looking rather than by guessing.",
-      "And your credentials stay yours. A secret’s value never reaches a collection file, so the folder you commit carries the shape of your API and none of your keys.",
+      "It keeps the request editor you already know and fixes the parts that never worked. Every variable shows which layer it came from, so “why is this going to the wrong server” is a question you answer by looking rather than by guessing.",
+      "An endpoint can become a small app: a few lines of script give it a form, and whoever only needs the button never has to see the request behind it.",
+      "Your credentials are encrypted on your machine and never written anywhere you would share.",
     ],
 
     sections: [

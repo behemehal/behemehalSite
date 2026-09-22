@@ -204,16 +204,26 @@ const jsonLd = {
         <div class="max-w-[1100px] mx-auto">
           <h2 class="text-2xl text-white px-8 exsm:px-5">Screenshots</h2>
           <div class="app-rail flex gap-4 overflow-x-auto snap-x snap-mandatory px-8 exsm:px-5 pt-5 pb-4">
-            {app.screenshots.map((shot) => (
+            {app.screenshots.map((shot, i) => (
               <figure class="snap-center shrink-0" style={{ width: `${shotWidth}px` }}>
-                <img
-                  src={shot.src}
-                  width={shotWidth}
-                  height={shotHeight}
-                  loading="lazy"
-                  alt={shot.caption}
-                  class="rounded-2xl border border-white/10 bg-primaryDark w-full h-auto"
-                />
+                {/* A screenshot in the rail is 680px wide at most, which for a desktop
+                    UI is a picture of a window rather than something you can read.
+                    Pressing it opens the file at its own size. */}
+                <button
+                  type="button"
+                  class="shot-open block w-full cursor-zoom-in rounded-2xl"
+                  data-shot={i}
+                  aria-label={`Open screenshot: ${shot.caption}`}
+                >
+                  <img
+                    src={shot.src}
+                    width={shotWidth}
+                    height={shotHeight}
+                    loading="lazy"
+                    alt={shot.caption}
+                    class="rounded-2xl border border-white/10 bg-primaryDark w-full h-auto"
+                  />
+                </button>
                 {/* A desktop screenshot is dense enough that the caption is doing real
                     work; on a phone shot the picture says it already. */}
                 {landscape && (
@@ -224,6 +234,16 @@ const jsonLd = {
               </figure>
             ))}
           </div>
+
+          <dialog id="shot-viewer" class="shot-viewer" aria-label="Screenshot">
+            <button type="button" class="shot-nav shot-prev" data-step="-1" aria-label="Previous screenshot">&lsaquo;</button>
+            <figure class="shot-stage">
+              <img id="shot-viewer-img" src="" alt="" />
+              <figcaption id="shot-viewer-caption"></figcaption>
+            </figure>
+            <button type="button" class="shot-nav shot-next" data-step="1" aria-label="Next screenshot">&rsaquo;</button>
+            <button type="button" class="shot-close" aria-label="Close">&times;</button>
+          </dialog>
         </div>
       </section>
     )}
@@ -377,3 +397,142 @@ const jsonLd = {
 
   <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
 </Layout>
+
+<style>
+  /* A <dialog> is the right element here: Escape closes it, focus is trapped, and
+     the backdrop is the browser's rather than a div pretending to be one. */
+  .shot-viewer[open] {
+    display: flex;
+    /* The close button anchors to the dialog, not to the viewport — without this it
+       lands over the site header. */
+    position: relative;
+    align-items: center;
+    gap: 0.5rem;
+    width: min(96vw, 1800px);
+    max-width: 96vw;
+    max-height: 92vh;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+  }
+  .shot-viewer::backdrop {
+    background: rgb(0 0 0 / 0.86);
+  }
+  .shot-stage {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+  }
+  .shot-stage img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 84vh;
+    object-fit: contain;
+    border-radius: 0.75rem;
+    border: 1px solid rgb(255 255 255 / 0.12);
+    background: #0b0b0f;
+  }
+  .shot-stage figcaption {
+    margin-top: 0.75rem;
+    color: rgb(255 255 255 / 0.62);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+  .shot-nav,
+  .shot-close {
+    flex: 0 0 auto;
+    color: rgb(255 255 255 / 0.72);
+    background: rgb(255 255 255 / 0.08);
+    border: 1px solid rgb(255 255 255 / 0.14);
+    border-radius: 999px;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .shot-nav {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.6rem;
+  }
+  .shot-nav:hover,
+  .shot-close:hover {
+    color: #fff;
+    background: rgb(255 255 255 / 0.16);
+  }
+  .shot-nav[disabled] {
+    opacity: 0.25;
+    cursor: default;
+  }
+  .shot-close {
+    /* Inside the dialog, not above it: the dialog is nearly the height of the
+       viewport, so a negative offset puts this over the site's own header. The
+       next arrow is vertically centred, so the two do not meet. */
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1.25rem;
+    background: rgb(0 0 0 / 0.55);
+    backdrop-filter: blur(6px);
+  }
+  /* On a phone the arrows would eat the picture, so the swipeable rail stays the
+     way through the set and the viewer is just "bigger". */
+  @media (max-width: 640px) {
+    .shot-nav { display: none; }
+  }
+</style>
+
+<script>
+  const viewer = document.getElementById("shot-viewer") as HTMLDialogElement | null;
+  const image = document.getElementById("shot-viewer-img") as HTMLImageElement | null;
+  const caption = document.getElementById("shot-viewer-caption");
+  const openers = [...document.querySelectorAll<HTMLButtonElement>(".shot-open")];
+
+  if (viewer && image && caption && openers.length) {
+    // Read off the rail's own <img>s rather than passing the list down twice: one
+    // source for what is on the page and what the viewer shows.
+    const shots = openers.map((button) => {
+      const img = button.querySelector("img");
+      return { src: img?.getAttribute("src") ?? "", caption: img?.getAttribute("alt") ?? "" };
+    });
+    let at = 0;
+
+    const show = (index: number) => {
+      at = Math.max(0, Math.min(shots.length - 1, index));
+      image.src = shots[at].src;
+      image.alt = shots[at].caption;
+      caption.textContent = shots[at].caption;
+      for (const nav of viewer.querySelectorAll<HTMLButtonElement>(".shot-nav")) {
+        const step = Number(nav.dataset.step ?? 0);
+        nav.disabled = at + step < 0 || at + step > shots.length - 1;
+      }
+    };
+
+    openers.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        show(index);
+        viewer.showModal();
+      });
+    });
+
+    viewer.querySelectorAll<HTMLButtonElement>(".shot-nav").forEach((nav) => {
+      nav.addEventListener("click", () => show(at + Number(nav.dataset.step ?? 0)));
+    });
+    viewer.querySelector(".shot-close")?.addEventListener("click", () => viewer.close());
+
+    // A press on the backdrop closes it. The dialog fills its own box, so anything
+    // landing on the element itself rather than on a child is the backdrop.
+    viewer.addEventListener("click", (event) => {
+      if (event.target === viewer) viewer.close();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (!viewer.open) return;
+      if (event.key === "ArrowRight") show(at + 1);
+      if (event.key === "ArrowLeft") show(at - 1);
+    });
+  }
+</script>
