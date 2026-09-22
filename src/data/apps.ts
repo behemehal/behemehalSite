@@ -433,6 +433,176 @@ export const APPS: AppEntry[] = [
     hasPrivacyPolicy: false,
     supportEmail: "info@behemehal.org",
   },
+  {
+    slug: "envelope",
+    packageName: "org.behemehal.envelope",
+    name: "Envelope",
+    tagline:
+      "A local HTTP client. No cloud, no account, free forever.",
+    kind: "app",
+    category: "Developer tools",
+    developer: "Behemehal",
+    tags: ["Desktop", "Free forever", "No account", "No cloud"],
+
+    icon: "/img/apps/envelope/icon.webp",
+    iconPng: "/img/apps/envelope/icon.png",
+    featureGraphic: "/img/apps/envelope/feature.webp",
+    platforms: ["macOS", "Windows", "Linux"],
+    orientation: "landscape",
+    // Pre-releases until there is a stable one to point at.
+    releases: { repo: "ahmetcanaksu/Envelope", allowPrerelease: true },
+
+    playUrl: null,
+    links: [],
+
+    screenshots: [
+      {
+        src: "/img/apps/envelope/screenshots/01-request.webp",
+        caption:
+          "The request editor: every variable traced back to the layer it came from, and :path holes filled after resolution",
+      },
+      {
+        src: "/img/apps/envelope/screenshots/02-form.webp",
+        caption:
+          "An endpoint as a small app — a few lines of script describe the controls, and the preview is the real thing",
+      },
+      {
+        src: "/img/apps/envelope/screenshots/03-secrets.webp",
+        caption:
+          "Environments in one place, with secrets encrypted on your machine and never written into the collection",
+      },
+      {
+        src: "/img/apps/envelope/screenshots/04-scenario.webp",
+        caption:
+          "A scenario is a list of requests that already exist, with state carried between them",
+      },
+      {
+        src: "/img/apps/envelope/screenshots/05-store.webp",
+        caption:
+          "What the app has of yours, by name — and it reads none of it to tell you",
+      },
+    ],
+
+    about: [
+      "Envelope is a program on your computer. No cloud, no account, nothing to sign in to, and free forever.",
+      "A collection is a folder of plain JSON files. You can read it, diff it in a pull request, and commit it beside the code it tests — it is yours, on your disk, in a directory you chose.",
+      "It keeps the request editor you already know and fixes the parts that never worked: every variable shows which layer it came from, so “why is this going to the wrong server” is a question you answer by looking rather than by guessing.",
+      "And your credentials stay yours. A secret’s value never reaches a collection file, so the folder you commit carries the shape of your API and none of your keys.",
+    ],
+
+    sections: [
+      {
+        heading: "Yours, on your machine",
+        items: [
+          "Free forever — no tier, no seat, no licence to renew",
+          "No account. Nothing to sign in to, and nothing that stops working when you do not",
+          "No cloud. A collection is a folder of plain JSON files in a directory you chose",
+          "Commit a collection with the code it tests, review it in a pull request, clone it on another machine",
+          "The only address it reaches on its own is ours, to ask whether there is a newer version — and that can be switched off",
+        ],
+      },
+      {
+        heading: "See where a request is actually going",
+        items: [
+          "Seven layers of variables, each chip tracing back to the one that won",
+          "A URL preview that is the bytes on the wire — the frontend never interpolates anything itself",
+          "Collection defaults for the collections with one server, environments for the ones with more",
+          "Production marks the window, and a mutating send against it asks first",
+          "A name with no value goes out as written and is reported, never quietly replaced with nothing",
+        ],
+      },
+      {
+        heading: "Credentials that stay out of your repo",
+        items: [
+          "A secret’s value never reaches a collection file; the file carries only the flag",
+          "Values are encrypted on your machine, sealed so a copied folder opens to nothing",
+          "One screen lists every secret the app holds, by name — and reads none of them to draw it",
+          "History keeps the masked request beside the response",
+        ],
+      },
+      {
+        heading: "Endpoints as small apps",
+        items: [
+          "A few lines of script turn a request into a form: pickers, sliders, file inputs, a button",
+          "A handler can send, branch on the answer and send again, then raise a table of what came back",
+          "Scripts run in a Rust sandbox, not in the page",
+          "Publish one as a mini app for the people who only need the button",
+        ],
+      },
+      {
+        heading: "More than one request at a time",
+        items: [
+          "Scenarios: a named list of requests that already exist, with state carried between them",
+          "Each step sends exactly the way the Send button does — same auth, same hooks, same history",
+          "The timeline runs down the rows you arranged rather than opening a report beside them",
+        ],
+      },
+      {
+        heading: "Bring what you already have",
+        items: [
+          "Import an OpenAPI or Swagger description, from a file or straight from a URL",
+          "Import a Postman collection; pm.* scripts are preserved, shown, and not run until you say so",
+          "Paste a curl command into the URL bar and it fills the request in; copy any request back out as one",
+        ],
+      },
+    ],
+
+    stats: [
+      { value: "Files", label: "Commit your collections" },
+      { value: "7", label: "Variable layers" },
+      { icon: "lock", label: "Secrets stay local" },
+      { value: "0", label: "Accounts" },
+      { value: "3", label: "Platforms" },
+    ],
+
+    contentRating: {
+      label: "Everyone",
+      detail:
+        "A developer tool. No accounts, no advertising, no purchases, and nothing that renders untrusted content with any privilege.",
+    },
+
+    dataSafety: [
+      {
+        icon: "cloud_off",
+        title: "Nothing is sent anywhere",
+        body:
+          "No account, no telemetry, no crash reporting. Besides the servers you point it at, Envelope reaches exactly one address: behemehal.org, to ask whether there is a newer version. That request carries no identifier and says nothing about you, your machine or your APIs, and it can be switched off.",
+      },
+      {
+        icon: "lock",
+        title: "Credentials stay on your machine",
+        body:
+          "A secret’s value is never written into a collection file, so the folder you commit carries none of them. The values live encrypted in the app’s own data folder, sealed to this computer — a backup or a synced copy of that folder opens to nothing.",
+      },
+      {
+        icon: "folder",
+        title: "Your collections are your files",
+        body:
+          "Plain JSON in a folder you choose, readable and diffable. The app keeps a local cache of history beside them; deleting it loses the history and nothing else.",
+      },
+      {
+        icon: "code_off",
+        title: "Scripts are shown before they run",
+        body:
+          "A collection can carry JavaScript. Imported scripts arrive flagged and are not executed until you have read them and said so, and everything that does run is sandboxed away from the page.",
+      },
+    ],
+
+    info: [
+      { label: "Availability", value: "In development — not yet released" },
+      { label: "Requires", value: "macOS, Windows or Linux" },
+      { label: "Imports", value: "OpenAPI 3.x, Swagger 2.0, Postman, curl" },
+      { label: "Category", value: "Developer tools" },
+      { label: "Offered by", value: "Behemehal" },
+      { label: "Built with", value: "Tauri 2, Rust, React" },
+      { label: "In-app purchases", value: "None" },
+      { label: "Ads", value: "None" },
+      { label: "Languages", value: "English" },
+    ],
+
+    hasPrivacyPolicy: false,
+    supportEmail: "info@behemehal.org",
+  },
 ];
 
 export const getApp = (slug: string): AppEntry | undefined =>
