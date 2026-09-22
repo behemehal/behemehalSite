@@ -80,8 +80,12 @@ export function json(body: unknown, init: ResponseInit = {}): Response {
   });
 }
 
-export function problem(status: number, message: string): Response {
-  return json({ error: message }, { status });
+export function problem(
+  status: number,
+  message: string,
+  headers: Record<string, string> = {},
+): Response {
+  return json({ error: message }, { status, headers });
 }
 
 /**

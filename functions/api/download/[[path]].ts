@@ -1,5 +1,5 @@
 import { releaseSource } from "../../_apps";
-import { isFailure, latestRelease, notVisible } from "../../_release";
+import { isFailure, latestRelease, notVisible, recentReleases } from "../../_release";
 import { githubHeaders, problem, type Ctx, type GithubRelease } from "../../_shared";
 
 /**
@@ -37,18 +37,24 @@ export async function onRequestGet(ctx: Ctx): Promise<Response> {
     if (isFailure(found)) return found.failure;
     release = found.release;
   } else {
-    const byTag = await fetch(
-      `https://api.github.com/repos/${source.repo}/releases/tags/${encodeURIComponent(tag)}`,
-      {
-        headers: githubHeaders(ctx.env, source.repo),
-        cf: { cacheTtl: 300, cacheEverything: true },
-      } as RequestInit,
-    );
-    if (byTag.status === 404 || byTag.status === 401) {
-      return notVisible(ctx.env, source, "No release with that tag.");
+    // The recent releases are already cached for the version endpoint, and a
+    // download link almost always points at one of them. Only a tag older than
+    // that window costs a GitHub call.
+    const known = await recentReleases(ctx.env, source);
+    const found = "failure" in known ? null : known.find((one) => one.tag_name === tag);
+    if (found) {
+      release = found;
+    } else {
+      const byTag = await fetch(
+        `https://api.github.com/repos/${source.repo}/releases/tags/${encodeURIComponent(tag)}`,
+        { headers: githubHeaders(ctx.env, source.repo) },
+      );
+      if (byTag.status === 404 || byTag.status === 401) {
+        return notVisible(ctx.env, source, "No release with that tag.");
+      }
+      if (!byTag.ok) return problem(502, `GitHub said ${byTag.status}.`);
+      release = (await byTag.json()) as GithubRelease;
     }
-    if (!byTag.ok) return problem(502, `GitHub said ${byTag.status}.`);
-    release = (await byTag.json()) as GithubRelease;
   }
 
   const asset = release.assets.find((candidate) => candidate.name === assetName);
