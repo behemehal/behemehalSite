@@ -285,8 +285,7 @@ export const APPS: AppEntry[] = [
     iconPng: "/img/apps/com.behemehal.caykesim/icon.png",
     featureGraphic: "/img/apps/com.behemehal.caykesim/feature.webp",
 
-    // Henüz Play'de değil; yayınlanınca bağlantı buraya.
-    playUrl: null,
+    playUrl: "https://play.google.com/store/apps/details?id=com.behemehal.caykesim",
     // SMS okuyan bir uygulamada politika en üstte, ilk bakışta görünmeli.
     links: [
       {
