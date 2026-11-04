@@ -271,6 +271,149 @@ export const APPS: AppEntry[] = [
   },
 
   {
+    slug: "com.behemehal.caykesim",
+    packageName: "com.behemehal.caykesim",
+    name: "Çay Kesim İstatistiği",
+    tagline:
+      "Çaykur'a verdiğin yaş çayın defteri. Kesim mesajlarını okur, dönem dönem toplar, takvimde gösterir.",
+    kind: "app",
+    category: "Araçlar",
+    developer: "Behemehal",
+    tags: ["Türkçe", "Hesap gerekmez", "Kayıtlar telefonda kalır"],
+
+    icon: "/img/apps/com.behemehal.caykesim/icon.webp",
+    iconPng: "/img/apps/com.behemehal.caykesim/icon.png",
+    featureGraphic: "/img/apps/com.behemehal.caykesim/feature.webp",
+
+    // Henüz Play'de değil; yayınlanınca bağlantı buraya.
+    playUrl: null,
+    links: [],
+
+    screenshots: [
+      {
+        src: "/img/apps/com.behemehal.caykesim/screenshots/01-otomatik-kayit.webp",
+        caption: "Kesimler kendiliğinden kaydedilir: Çaykur'un kesim mesajı gelince kilo, kalan kota, tarih ve alım yeri deftere işlenir, bildirim gelir.",
+      },
+      {
+        src: "/img/apps/com.behemehal.caykesim/screenshots/02-ozet.webp",
+        caption: "Özet: süren dönemde ne kadar çay verdiğin, kalan kotan, bu haftanın toplamı ve yılın fiyatıyla tahmini kazancın.",
+      },
+      {
+        src: "/img/apps/com.behemehal.caykesim/screenshots/03-takvim.webp",
+        caption: "Takvim: her günün altında o gün verdiğin kilo; alım olmayan günler işaretli, dönemler renkli şeritle görünür. Bir güne dokununca o günün özeti açılır.",
+      },
+      {
+        src: "/img/apps/com.behemehal.caykesim/screenshots/04-donemler.webp",
+        caption: "Dönemler: 1., 2. ve 3. çay ayrı ayrı; her dönemin toplamı, kazancı ve kotanın ne kadarını kullandığın. Dönemler kalan kotadan kendiliğinden bulunur.",
+      },
+      {
+        src: "/img/apps/com.behemehal.caykesim/screenshots/05-yillar.webp",
+        caption: "Yıllar: her yılın dönemlerini yan yana gör, bu yılın geçen yıldan iyi gidip gitmediğini anla. Kilo ile kazanç arasında geçiş yapılabilir.",
+      },
+      {
+        src: "/img/apps/com.behemehal.caykesim/screenshots/06-gizlilik.webp",
+        caption: "Gizlilik: yalnızca Çaykur'un mesajları işlenir, diğerleri ayıklanıp atlanır. Kayıtların telefonunda kalır; mesajların hiçbir yere gönderilmez, reklam için kullanılmaz.",
+      },
+    ],
+
+    about: [
+      "Kâğıda yazmana, mesajları tek tek saymana gerek yok.",
+      "Çaykur her kesimden sonra sana bir SMS gönderir: kaç kilo alındığı, kalan kotan, tarih ve alım yeri. Çay Kesim İstatistiği bu mesajları senin yerine okur ve bir deftere dönüştürür. 1., 2. ve 3. çayda ne kadar verdiğini, dönemin ne zaman başlayıp bittiğini, bu yılın geçen yıldan iyi olup olmadığını tek bakışta görürsün.",
+      "Yaşlı kullanıcılar düşünülerek yapıldı: büyük yazı seçeneği, sade ekranlar, her durum simge ve kelimeyle yazılı. Uygulama Çaykur'un resmî uygulaması değildir.",
+    ],
+
+    sections: [
+      {
+        heading: "Defter kendiliğinden tutulur",
+        items: [
+          "Çaykur'un kesim mesajı gelince kesim deftere yazılır, istersen bildirim gelir",
+          "Telefonundaki eski mesajlardan geçmiş sezonlar bir dokunuşla içe aktarılır",
+          "Aynı kesim iki kez yazılmaz",
+          "Kontenjan ve \"bugün alım yok\" duyuruları da takvime işlenir",
+        ],
+      },
+      {
+        heading: "Dönemler ve takvim",
+        items: [
+          "Kesimler 1., 2. ve 3. çaya kendiliğinden ayrılır",
+          "Ay takviminde her günün kilosu, dönemler renkli şerit hâlinde",
+          "Hangi gün alım var, kontenjan kaç kilo",
+          "Yılları karşılaştır: bu sezon geçen yıldan ne kadar fazla ya da az",
+        ],
+      },
+      {
+        heading: "Kazanç ve notlar",
+        items: [
+          "Yılın kilo fiyatıyla tahmini kazanç",
+          "Başkasının defterine yazdırılan çay, alınacak para gibi şeyler için notlar",
+          "Yedeğini bir dosyaya alıp yeni telefona taşıyabilirsin",
+        ],
+      },
+      {
+        heading: "Mesajların telefonunda kalır",
+        items: [
+          "Yalnızca Çaykur'dan gelen mesajlar işlenir, diğerleri atlanır",
+          "Mesajların hiçbir yere gönderilmez, reklam için kullanılmaz",
+          "Hesap, giriş, e-posta yok",
+          "SMS izni vermeden de kullanılabilir; kesimleri elle girersin",
+        ],
+      },
+    ],
+
+    stats: [
+      { icon: "sms", label: "Kendiliğinden kayıt" },
+      { icon: "calendar_month", label: "Ay takvimi" },
+      { icon: "text_increase", label: "Büyük yazı" },
+      { icon: "phone_android", label: "Telefonda kalır" },
+    ],
+
+    contentRating: {
+      label: "Herkes",
+      detail: "Kayıt tutma aracı. Şiddet ya da uygunsuz içerik yok. Banner reklam içerir (PG ile sınırlı).",
+    },
+
+    dataSafety: [
+      {
+        icon: "sms",
+        title: "Yalnızca Çaykur mesajları okunur",
+        body:
+          "Kesim ve duyuru mesajları defteri tutmak için okunur. Diğer mesajların uygulamaya gelmez ya da hemen atılır; hiçbiri kaydedilmez.",
+      },
+      {
+        icon: "phone_android",
+        title: "Kayıtlar telefonunda kalır",
+        body:
+          "Kesimler, notlar ve ayarlar yalnızca telefonda saklanır; bize ya da başkasına gönderilmez, Google Drive yedeğine de girmez. Yedeği sen alırsan, senin seçtiğin yere yazılır.",
+      },
+      {
+        icon: "ads_click",
+        title: "Reklamlar Google'dan gelir",
+        body:
+          "Banner reklamları Google Mobile Ads SDK'sı gösterir; reklam kimliği ve reklam etkileşim verisi Google'a gider. SMS mesajların ve defterin reklam tarafına asla verilmez.",
+      },
+      {
+        icon: "person_off",
+        title: "Hesap yok, takip yok",
+        body: "Giriş, e-posta, analitik yok. Rehber, konum, kamera, mikrofon ya da fotoğraflara erişim yok.",
+      },
+    ],
+
+    info: [
+      { label: "Sürüm", value: "1.0" },
+      { label: "Gereken", value: "Android 8.0 ve üstü" },
+      { label: "Kategori", value: "Araçlar" },
+      { label: "Sunan", value: "Behemehal" },
+      { label: "Uygulama içi satın alma", value: "Yok" },
+      { label: "Reklam", value: "Banner reklam içerir" },
+      { label: "Dil", value: "Türkçe" },
+      { label: "İzinler", value: "SMS okuma ve alma, bildirim (hepsi isteğe bağlı)" },
+    ],
+
+    hasPrivacyPolicy: true,
+    supportEmail: "info@behemehal.org",
+  },
+
+  {
     slug: "quickv",
     packageName: "com.quickv.desktop",
     name: "QuicKV",
