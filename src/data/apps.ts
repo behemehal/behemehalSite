@@ -287,7 +287,14 @@ export const APPS: AppEntry[] = [
 
     // Henüz Play'de değil; yayınlanınca bağlantı buraya.
     playUrl: null,
-    links: [],
+    // SMS okuyan bir uygulamada politika en üstte, ilk bakışta görünmeli.
+    links: [
+      {
+        label: "Gizlilik politikası",
+        href: "/apps/com.behemehal.caykesim/privacy",
+        icon: "shield",
+      },
+    ],
 
     screenshots: [
       {
