@@ -122,6 +122,137 @@ export interface AppEntry {
 }
 
 export const APPS: AppEntry[] = [
+// Sand Sorting Chroma — BEGIN
+{
+  "slug": "com.behemehal.sandsortingchroma",
+  "packageName": "com.behemehal.sandsortingchroma",
+  "name": "Sand Sorting Chroma",
+  "tagline": "Sort shimmering sand, fill glass shapes and discover a new splash of color.",
+  "kind": "game",
+  "category": "Puzzle",
+  "developer": "Behemehal",
+  "tags": [
+    "Single player",
+    "Offline puzzles",
+    "English & Turkish"
+  ],
+  "icon": "/img/apps/com.behemehal.sandsortingchroma/icon.webp",
+  "iconPng": "/img/apps/com.behemehal.sandsortingchroma/icon.png",
+  "featureGraphic": "/img/apps/com.behemehal.sandsortingchroma/feature.webp",
+  "playUrl": "https://play.google.com/store/apps/details?id=com.behemehal.sandsortingchroma",
+  "links": [],
+  "screenshots": [
+    {
+      "src": "/img/apps/com.behemehal.sandsortingchroma/screenshots/01-sort.webp",
+      "caption": "Transparent tubes, hidden layers and changing sand palettes"
+    },
+    {
+      "src": "/img/apps/com.behemehal.sandsortingchroma/screenshots/02-pour.webp",
+      "caption": "A smooth pour between matching colors"
+    },
+    {
+      "src": "/img/apps/com.behemehal.sandsortingchroma/screenshots/03-challenge.webp",
+      "caption": "A glass object awaits every tenth level"
+    },
+    {
+      "src": "/img/apps/com.behemehal.sandsortingchroma/screenshots/04-collection.webp",
+      "caption": "Inspect and rotate the objects you fill"
+    },
+    {
+      "src": "/img/apps/com.behemehal.sandsortingchroma/screenshots/05-sands.webp",
+      "caption": "Choose crystal, metallic and other sand finishes"
+    },
+    {
+      "src": "/img/apps/com.behemehal.sandsortingchroma/screenshots/06-goals.webp",
+      "caption": "Three daily goals, credit rewards and a local Chroma Score"
+    }
+  ],
+  "about": [
+    "A little color. A satisfying pour. One more puzzle. Move matching sand between laboratory glass tubes until each filled tube holds one color.",
+    "The 200-level campaign changes its arrangements and palettes as you progress. Every tenth level brings an extra challenge and a glass shape for your collection."
+  ],
+  "sections": [
+    {
+      "heading": "Sort, collect, return",
+      "items": [
+        "200 verified puzzles with a mix of relaxed and more demanding levels",
+        "Hidden lower layers in later levels",
+        "Twenty collectible milestones with stars, hearts and low-poly shapes",
+        "Six color palettes and eight sand finishes",
+        "Daily goals, credit rewards and a daily play streak",
+        "Limited undo, restart and optional helper items bought with earned credits"
+      ]
+    },
+    {
+      "heading": "Türkçe",
+      "items": [
+        "Cam tüplerdeki renkli kumları sırala; ilerleyen bölümlerde gizli katmanları keşfet.",
+        "Her on bölümde bir yeni cam obje kazan, koleksiyonunda yakından incele ve döndür.",
+        "Günlük hedefler, değişen paletler ve sekiz kum görünümüyle ilerlemene renk kat."
+      ]
+    }
+  ],
+  "stats": [
+    {
+      "value": "200",
+      "label": "Levels"
+    },
+    {
+      "value": "8",
+      "label": "Sand finishes"
+    },
+    {
+      "value": "20",
+      "label": "Collectible milestones"
+    }
+  ],
+  "contentRating": {
+    "label": "Not rated",
+    "detail": "Store content rating pending"
+  },
+  "dataSafety": [
+    {
+      "icon": "save",
+      "title": "Local progress",
+      "body": "Progress, cosmetics, earned credits and daily goals are saved on the device. This is not a cloud backup."
+    },
+    {
+      "icon": "ads_click",
+      "title": "Advertising services",
+      "body": "Menu banners and optional rewarded ads use Google AdMob. Google may process device/ad identifiers, IP-derived approximate location, interactions and diagnostics."
+    },
+    {
+      "icon": "account_circle",
+      "title": "Core play needs no account",
+      "body": "The puzzles work offline. Configured releases may support Google Play Games scores and achievements; these services follow Google account settings."
+    }
+  ],
+  "info": [
+    {
+      "label": "Platform",
+      "value": "Android"
+    },
+    {
+      "label": "Status",
+      "value": "In development"
+    },
+    {
+      "label": "Languages",
+      "value": "English, Türkçe"
+    },
+    {
+      "label": "In-app purchases",
+      "value": "No real-money purchases"
+    },
+    {
+      "label": "Ads",
+      "value": "Menu banners and optional rewarded ads"
+    }
+  ],
+  "hasPrivacyPolicy": true,
+  "supportEmail": "info@behemehal.org"
+},
+// Sand Sorting Chroma — END
   {
     slug: "com.behemehal.laser",
     packageName: "com.behemehal.laser",
